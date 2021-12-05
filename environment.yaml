@@ -1,0 +1,9 @@
+name: geoanalysis_app
+channels:
+  - conda-forge
+dependencies:
+  - python==3.9
+  - pandas
+  - pip
+  - pip:
+    - --editable .
