@@ -1,9 +1,27 @@
-import folium
-import folium.plugins
 import streamlit as st
 from geoanalysis_app import common
-from geoanalysis_app import constants as C
+from geoanalysis_app.analysis_tools import cluster_map as cm
 from streamlit_folium import folium_static
+
+
+@st.cache(allow_output_mutation=True)
+def load_data():
+    return common.load_data()
+
+
+def preprocess_data(data, from_day, to_day, time_of_day):
+    keep_cols = [
+        "start_centroid_latitude",
+        "start_centroid_longitude",
+    ]
+
+    data = data[keep_cols]
+    data.dropna(inplace=True)
+
+    start_loc = data[["start_centroid_latitude", "start_centroid_longitude"]]
+    start_loc = start_loc.to_numpy()
+
+    return start_loc
 
 
 def render_page() -> None:
@@ -25,24 +43,7 @@ def render_page() -> None:
     )
 
     data_df = common.load_data()
-    keep_cols = [
-        "start_centroid_latitude",
-        "start_centroid_longitude",
-        "end_centroid_latitude",
-        "end_centroid_longitude",
-    ]
+    preprocessed_data = preprocess_data(data_df, from_day, to_day, None)
 
-    data_df = data_df[keep_cols]
-    data_df.dropna(inplace=True)
-
-    start_loc = data_df[["start_centroid_latitude", "start_centroid_longitude"]]
-    start_loc = start_loc.to_numpy()
-
-    map_object = folium.Map(
-        location=C.CHICAGO_COORDINATES, zoom_start=11
-    )
-
-    marker_clusters = folium.plugins.MarkerCluster(start_loc)
-    map_object.add_child(marker_clusters)
-
-    folium_static(map_object)
+    cluster_map = cm.create_cluster_map(preprocessed_data)
+    folium_static(cluster_map)
