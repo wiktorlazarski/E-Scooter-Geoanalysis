@@ -1,5 +1,6 @@
 import streamlit as st
 from geoanalysis_app import common
+from geoanalysis_app import constants as C
 from geoanalysis_app.analysis_tools import cluster_map as cm
 from streamlit_folium import folium_static
 
@@ -9,13 +10,15 @@ def load_data():
     return common.load_data()
 
 
-def preprocess_data(data, from_day, to_day, time_of_day):
+def preprocess_data(data, from_day, to_day, times_of_day):
+    # TODO: Apply filetring by from_dat, to_dat, times_of_day
+
     keep_cols = [
         "start_centroid_latitude",
         "start_centroid_longitude",
     ]
 
-    data = data[keep_cols]
+    data = data[keep_cols].copy()
     data.dropna(inplace=True)
 
     start_loc = data[["start_centroid_latitude", "start_centroid_longitude"]]
@@ -32,18 +35,24 @@ def render_page() -> None:
         """
     )
 
+    data_df = common.load_data()
+
     from_day = st.date_input("Analyze starting from day:")
     to_day = st.date_input("Analyze to day:")
 
-    st.markdown(
-        """
-        ---
-        ### Wizualizacja rejonów ze względu na największą ilość wypożyczeń.
-        """
+    times_of_day = st.multiselect(
+        "Select times of a day:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
 
-    data_df = common.load_data()
-    preprocessed_data = preprocess_data(data_df, from_day, to_day, None)
+    if st.button("Generate analysis"):
+        st.markdown(
+            """
+            ---
+            ### Wizualizacja rejonów ze względu na największą ilość wypożyczeń.
+            """
+        )
 
-    cluster_map = cm.create_cluster_map(preprocessed_data)
-    folium_static(cluster_map)
+        preprocessed_data = preprocess_data(data_df, from_day, to_day, times_of_day)
+
+        cluster_map = cm.create_cluster_map(preprocessed_data)
+        folium_static(cluster_map)
