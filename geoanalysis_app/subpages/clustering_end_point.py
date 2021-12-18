@@ -10,7 +10,7 @@ def load_data():
     return common.load_data()
 
 
-def preprocess_data(data, from_day, to_day, times_of_day):
+def preprocess_data(data, from_day, to_day, day_types, times_of_day):
     # TODO: Apply filetring by from_dat, to_dat, times_of_day
 
     keep_cols = [
@@ -40,6 +40,9 @@ def render_page() -> None:
     from_day = st.date_input("Analizuj od dnia:")
     to_day = st.date_input("Analizuj do dnia:")
 
+    day_types = st.multiselect(
+        "Wybierz typy dni:", options=C.DAY_TYPES, default=C.DAY_TYPES
+    )
     times_of_day = st.multiselect(
         "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
@@ -52,7 +55,9 @@ def render_page() -> None:
             """
         )
 
-        preprocessed_data = preprocess_data(data_df, from_day, to_day, times_of_day)
+        preprocessed_data = preprocess_data(
+            data_df, from_day, to_day, day_types, times_of_day
+        )
 
         cluster_map = cm.create_cluster_map(preprocessed_data)
         folium_static(cluster_map)

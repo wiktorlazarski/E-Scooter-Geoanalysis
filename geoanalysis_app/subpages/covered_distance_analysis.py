@@ -20,6 +20,10 @@ def render_page() -> None:
     from_day = st.date_input("Analizuj od dnia:")
     to_day = st.date_input("Analizuj do dnia:")
 
+    day_types = st.multiselect(
+        "Wybierz typy dni:", options=C.DAY_TYPES, default=C.DAY_TYPES
+    )
+
     times_of_day = st.multiselect(
         "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
