@@ -30,21 +30,21 @@ def preprocess_data(data, from_day, to_day, times_of_day):
 def render_page() -> None:
     st.markdown(
         """
-        # End point' clusters
+        # Grupowanie punktów końcowych
         ---
         """
     )
 
     data_df = common.load_data()
 
-    from_day = st.date_input("Analyze starting from day:")
-    to_day = st.date_input("Analyze to day:")
+    from_day = st.date_input("Analizuj od dnia:")
+    to_day = st.date_input("Analizuj do dnia:")
 
     times_of_day = st.multiselect(
-        "Select times of a day:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
+        "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
 
-    if st.button("Generate analysis"):
+    if st.button("Wygeneruj analizy"):
         st.markdown(
             """
             ---
