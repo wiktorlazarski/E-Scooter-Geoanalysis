@@ -4,12 +4,12 @@ import streamlit as st
 def render_page() -> None:
     st.markdown(
         """
-        # 🛴 E-Scooter rents Geoanalysis 🌎
+        # 🛴 Geoanaliza wyporzyczeń hulajnóg elektrycznych 🌎
         ---
-        ## Course: _(SPDB) Przestrzenne Bazy Danych_
+        ## Przedmiot: _(SPDB) Przestrzenne Bazy Danych_
 
-        #### Authors: Wiktor Łazarski, Ula Tworzydło, Zosia Matyjewska
-        """
+        #### Autorzy: Wiktor Łazarski, Ula Tworzydło, Zosia Matyjewska
+        """,
     )
 
 
