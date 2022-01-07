@@ -10,7 +10,8 @@ def load_data():
     return common.load_data()
 
 def preprocess_data(data, from_day, to_day, day_types, times_of_day):
-    # TODO: Apply filetring by from_dat, to_dat, times_of_day
+    # TODO: Apply filetring by from_dat, to_dat
+    # I need function without time of the day function!!!
 
     keep_cols = [
         "Start Time",
@@ -40,21 +41,17 @@ def render_page() -> None:
         "Wybierz typy dni:", options=C.DAY_TYPES, default=C.DAY_TYPES
     )
 
-    times_of_day = st.multiselect(
-        "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
-    )
-
-    bins_width = st.slider('Pick a number', min_value=250, max_value=10000, value=1000, step=250)
+    # times_of_day = st.multiselect(
+    #     "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
+    # )
 
     if st.button("Wygeneruj analizy"):
         st.markdown(
             """
             ---
-            ### Histogram długości przejechanej drogi w ramach jednego wypożyczenia
+            ### Histogram sum przejechanych tras w odstępach godzinowych
             """
         )
 
-    
-        #tu to bins_width musisz zrobić
         fig = hist.histogram_trip_length(data_df,bins_width)
         st.pyplot(fig)
