@@ -44,7 +44,7 @@ def render_page() -> None:
         "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
 
-    bins_width = st.slider('Pick a number', min_value=250, max_value=10000, value=1000, step=250)
+    bins_width = st.slider('Wybierz przedział odległości', min_value=250, max_value=10000, value=1000, step=250)
 
     if st.button("Wygeneruj analizy"):
         st.markdown(
