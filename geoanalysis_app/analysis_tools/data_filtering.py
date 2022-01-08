@@ -28,8 +28,7 @@ def interval_to_hours(interval):
     return start_time, end_time
 
 
-def filter_data(day_type, start_day, end_day, intervals):
-    data = pandas.read_csv('../../data/dataZosia.csv') #toDo change path to our data!!!
+def filter_data(data, day_type, start_day, end_day, intervals):
     days = filter_days(data, start_day, end_day)
     weekdays = filter_weekdays(days, day_type)
     no_of_intervals = len(intervals)
@@ -67,14 +66,18 @@ def filter_hours(data,start_time, end_time):
     return hours
 
 
-#print(days['weekday'])
+
+
+""" TESTS:
+data = pandas.read_csv('../../data/dataZosia.csv') #toDo change path to our data!!!
 day_type = 1 #dni robocze
 start_day = '2019-06-12T06:00:00.000'
 end_day = '2019-06-19T05:00:00.000'
 start_time = '05:00:00'
 end_time = '11:00:00'
 intervals = [1]
-filtered = filter_data(day_type, start_day,end_day, intervals)
+filtered = filter_data(data, day_type, start_day,end_day, intervals)
 print("Filtered data:")
 print(filtered['start_time'])
+"""
 
