@@ -14,14 +14,14 @@ def preprocess_data(data, from_day, to_day, day_types, times_of_day):
     # TODO: Apply filetring by from_dat, to_dat, times_of_day
 
     keep_cols = [
-        "end_centroid_latitude",
-        "end_centroid_longitude",
+        "End Centroid Latitude",
+        "End Centroid Longitude",
     ]
 
     data = data[keep_cols].copy()
     data.dropna(inplace=True)
 
-    end_loc = data[["end_centroid_latitude", "end_centroid_longitude"]]
+    end_loc = data[["End Centroid Latitude", "End Centroid Longitude"]]
     end_loc = end_loc.to_numpy()
 
     return end_loc
@@ -35,7 +35,7 @@ def render_page() -> None:
         """
     )
 
-    data_df = common.load_data()
+    data_df = load_data()
 
     from_day = st.date_input("Analizuj od dnia:")
     to_day = st.date_input("Analizuj do dnia:")
