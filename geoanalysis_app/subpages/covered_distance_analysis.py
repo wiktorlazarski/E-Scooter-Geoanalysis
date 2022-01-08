@@ -9,15 +9,11 @@ from geoanalysis_app.analysis_tools import histograms as hist
 def load_data():
     return common.load_data()
 
+
 def preprocess_data(data, from_day, to_day, day_types, times_of_day):
     # TODO: Apply filetring by from_dat, to_dat, times_of_day
 
-    keep_cols = [
-        "Start Time",
-        "End Time",
-        "Trip Distance",
-        "Trip Duration"
-    ]
+    keep_cols = ["Start Time", "End Time", "Trip Distance", "Trip Duration"]
 
     data = data[keep_cols].copy()
     data.dropna(inplace=True)
@@ -33,6 +29,8 @@ def render_page() -> None:
         """
     )
 
+    data_df = load_data()
+
     from_day = st.date_input("Analizuj od dnia:")
     to_day = st.date_input("Analizuj do dnia:")
 
@@ -44,7 +42,13 @@ def render_page() -> None:
         "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
     )
 
-    bins_width = st.slider('Wybierz przedział odległości', min_value=250, max_value=10000, value=1000, step=250)
+    bins_width = st.slider(
+        "Wybierz przedział odległości",
+        min_value=250,
+        max_value=10000,
+        value=1000,
+        step=250,
+    )
 
     if st.button("Wygeneruj analizy"):
         st.markdown(
@@ -54,7 +58,6 @@ def render_page() -> None:
             """
         )
 
-    
-        #tu to bins_width musisz zrobić
-        fig = hist.histogram_trip_length(data_df,bins_width)
+        # tu to bins_width musisz zrobić
+        fig = hist.histogram_trip_length(data_df, bins_width)
         st.pyplot(fig)

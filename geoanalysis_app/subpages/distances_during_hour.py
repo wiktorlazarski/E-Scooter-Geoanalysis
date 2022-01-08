@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import streamlit as st
 from geoanalysis_app import common
 from geoanalysis_app import constants as C
@@ -8,6 +7,7 @@ from geoanalysis_app.analysis_tools import histograms as hist
 @st.cache(allow_output_mutation=True)
 def load_data():
     return common.load_data()
+
 
 def preprocess_data(data, from_day, to_day, day_types, times_of_day):
     # TODO: Apply filetring by from_dat, to_dat
@@ -34,6 +34,8 @@ def render_page() -> None:
         """
     )
 
+    data_df = load_data()
+
     from_day = st.date_input("Analizuj od dnia:")
     to_day = st.date_input("Analizuj do dnia:")
 
@@ -53,5 +55,7 @@ def render_page() -> None:
             """
         )
 
-        fig = hist.histogram_trip_length(data_df,bins_width)
+        fig = hist.histogram_distance_per_hour(data_df)
+        import matplotlib.pyplot as plt
+        fig.savefig("sdsd.png", format="png")
         st.pyplot(fig)
