@@ -35,7 +35,7 @@ def preprocess_data(data, from_day, to_day, day_types, times_of_day):
 def render_page() -> None:
     st.markdown(
         """
-        # Grupowanie punktów końcowych
+        # Grupowanie punktów startowych
         ---
         """
     )

@@ -24,7 +24,7 @@ def preprocess_data(data, from_day, to_day, day_types, times_of_day):
     ]
 
     filtered_data = filtered_data[keep_cols].copy()
-    data.dropna(inplace=True)
+    filtered_data.dropna(inplace=True)
 
     end_loc = filtered_data[["End Centroid Latitude", "End Centroid Longitude"]]
     end_loc = end_loc.to_numpy()
