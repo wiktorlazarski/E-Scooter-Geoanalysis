@@ -30,12 +30,13 @@ def interval_to_hours(interval):
 
 def filter_data(data, day_type, start_day, end_day, intervals):
     days = filter_days(data, start_day, end_day)
-    weekdays = filter_weekdays(days, day_type)
+    if len(day_type) == 1:
+       days = filter_weekdays(days, day_type)
     no_of_intervals = len(intervals)
     hours = pandas.DataFrame(columns=data.columns)
     for i in range(no_of_intervals):
         start_time, end_time = interval_to_hours(intervals[i])
-        part_hours = filter_hours(weekdays, start_time, end_time)
+        part_hours = filter_hours(days, start_time, end_time)
         hours = hours.append(part_hours)
     return hours
 
@@ -51,7 +52,7 @@ def filter_days(data, start_day, end_day):
 
 
 def filter_weekdays(days, day_type):
-    if (day_type == "ŚWIĄTECZNY"):  # swieto
+    if (day_type[0] == "ŚWIĄTECZNY"):  # swieto
         weekdays = days[
             (pandas.to_datetime(days['Start Time']).dt.weekday == 5) | (pandas.to_datetime(days['Start Time']).dt.weekday == 6)]  # 5=Saturday, 6=Sunday
     else:
@@ -69,8 +70,8 @@ def filter_hours(data,start_time, end_time):
     return hours
 
 
-# data = pandas.read_csv('../../data/data.csv')
-# day_type = ["NORMALNY"] #dni robocze
+# data = pandas.read_csv('../data/data.csv')
+# day_type = ["ŚWIĄTECZNY","NORMALNY"]
 # start_day = '2019-06-12'
 # end_day = '2019-06-19'
 # start_time = '05:00:00'
