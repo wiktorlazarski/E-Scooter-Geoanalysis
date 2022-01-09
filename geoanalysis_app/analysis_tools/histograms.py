@@ -102,10 +102,10 @@ def histogram_distance_per_hour(data_df):
     distances = [0 for i in range(24)]
 
     for row in data_df.itertuples():
-        start_time = row[2]
-        end_time = row[3]
-        distance = row[4]
-        duration = row[5]
+        start_time = row[1]
+        end_time = row[2]
+        distance = row[3]
+        duration = row[4]
         distances = count_distance_per_hour(
             distances, start_time, end_time, distance, duration
         )

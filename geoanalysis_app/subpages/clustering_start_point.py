@@ -14,7 +14,9 @@ def load_data():
 
 
 def preprocess_data(data, from_day, to_day, day_types, times_of_day):
-    filtered_data = data_fit.filter_days(data, from_day, to_day)
+    filtered_data = data_fit.filter_data(
+        data, day_types, from_day, to_day, times_of_day
+    )
 
     keep_cols = [
         "Start Centroid Latitude",

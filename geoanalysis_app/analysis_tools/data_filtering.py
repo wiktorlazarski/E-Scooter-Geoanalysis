@@ -43,10 +43,10 @@ def filter_data(data, day_type, start_day, end_day, intervals):
 
 def filter_days(data, start_day, end_day):
     zero_time = 'T00:00:00.000'
-    start_date = start_day + zero_time
+    start_date = str(start_day) + zero_time
 
     max_time = 'T23:59:59.000'
-    end_date = end_day + max_time
+    end_date = str(end_day) + max_time
     days = data[(data['Start Time'] >= start_date) & (data['Start Time'] < end_date)]
     return days
 

@@ -1,6 +1,9 @@
+from datetime import datetime
+
 import streamlit as st
 from geoanalysis_app import common
 from geoanalysis_app import constants as C
+from geoanalysis_app.analysis_tools import data_filtering as data_fit
 from geoanalysis_app.analysis_tools import histograms as hist
 
 
@@ -9,21 +12,17 @@ def load_data():
     return common.load_data()
 
 
-def preprocess_data(data, from_day, to_day, day_types, times_of_day):
-    # TODO: Apply filetring by from_dat, to_dat
-    # I need function without time of the day function!!!
+def preprocess_data(data, from_day, to_day, day_types):
+    filtered_data = data_fit.filter_data(
+        data, day_types, from_day, to_day, ["RANO", "POŁUDNIE", "WIECZÓR", "NOC"]
+    )
 
-    keep_cols = [
-        "Start Time",
-        "End Time",
-        "Trip Distance",
-        "Trip Duration"
-    ]
+    keep_cols = ["Start Time", "End Time", "Trip Distance", "Trip Duration"]
 
-    data = data[keep_cols].copy()
-    data.dropna(inplace=True)
+    filtered_data = filtered_data[keep_cols].copy()
+    filtered_data.dropna(inplace=True)
 
-    return data
+    return filtered_data
 
 
 def render_page() -> None:
@@ -36,16 +35,12 @@ def render_page() -> None:
 
     data_df = load_data()
 
-    from_day = st.date_input("Analizuj od dnia:")
-    to_day = st.date_input("Analizuj do dnia:")
+    from_day = st.date_input("Analizuj od dnia:", value=datetime(2019, 6, 8))
+    to_day = st.date_input("Analizuj do dnia:", value=datetime(2019, 8, 13))
 
     day_types = st.multiselect(
         "Wybierz typy dni:", options=C.DAY_TYPES, default=C.DAY_TYPES
     )
-
-    # times_of_day = st.multiselect(
-    #     "Wybierz pory dnia:", options=C.TIMES_OF_DAY, default=C.TIMES_OF_DAY
-    # )
 
     if st.button("Wygeneruj analizy"):
         st.markdown(
@@ -55,7 +50,12 @@ def render_page() -> None:
             """
         )
 
-        fig = hist.histogram_distance_per_hour(data_df)
-        import matplotlib.pyplot as plt
-        fig.savefig("sdsd.png", format="png")
+        preprocessed_data = preprocess_data(
+            data_df,
+            from_day,
+            to_day,
+            day_types,
+        )
+
+        fig = hist.histogram_distance_per_hour(preprocessed_data)
         st.pyplot(fig)

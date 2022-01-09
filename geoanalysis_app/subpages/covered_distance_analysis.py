@@ -1,7 +1,9 @@
-import matplotlib.pyplot as plt
+from datetime import datetime
+
 import streamlit as st
 from geoanalysis_app import common
 from geoanalysis_app import constants as C
+from geoanalysis_app.analysis_tools import data_filtering as data_fit
 from geoanalysis_app.analysis_tools import histograms as hist
 
 
@@ -11,14 +13,16 @@ def load_data():
 
 
 def preprocess_data(data, from_day, to_day, day_types, times_of_day):
-    # TODO: Apply filetring by from_dat, to_dat, times_of_day
+    filtered_data = data_fit.filter_data(
+        data, day_types, from_day, to_day, times_of_day
+    )
 
     keep_cols = ["Start Time", "End Time", "Trip Distance", "Trip Duration"]
 
-    data = data[keep_cols].copy()
-    data.dropna(inplace=True)
+    filtered_data = filtered_data[keep_cols].copy()
+    filtered_data.dropna(inplace=True)
 
-    return data
+    return filtered_data
 
 
 def render_page() -> None:
@@ -31,8 +35,8 @@ def render_page() -> None:
 
     data_df = load_data()
 
-    from_day = st.date_input("Analizuj od dnia:")
-    to_day = st.date_input("Analizuj do dnia:")
+    from_day = st.date_input("Analizuj od dnia:", value=datetime(2019, 6, 8))
+    to_day = st.date_input("Analizuj do dnia:", value=datetime(2019, 8, 13))
 
     day_types = st.multiselect(
         "Wybierz typy dni:", options=C.DAY_TYPES, default=C.DAY_TYPES
@@ -58,6 +62,13 @@ def render_page() -> None:
             """
         )
 
-        # tu to bins_width musisz zrobić
-        fig = hist.histogram_trip_length(data_df, bins_width)
+        preprocessed_data = preprocess_data(
+            data_df,
+            from_day,
+            to_day,
+            day_types,
+            times_of_day
+        )
+
+        fig = hist.histogram_trip_length(preprocessed_data, bins_width)
         st.pyplot(fig)
